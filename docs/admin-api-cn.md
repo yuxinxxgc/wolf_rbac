@@ -2443,8 +2443,7 @@ token | string | 是 | 登录token
 
 #### 响应
 
-由于wolf并不实际存储RBAC_TOKEN, 所以注销登录后, 只需要删除客户端token即可.
-操作完成后, 服务器将Cookie中的`x-rbac-token`设置为logouted. 并将302跳转到登录页面.
+由于wolf并不实际存储RBAC_TOKEN, 所以登录后, 客户端保存自己appid的token
 
 
 #### 示例
@@ -2453,7 +2452,13 @@ token | string | 是 | 登录token
 
 ```json
 curl http://127.0.0.1:10080/wolf/rbac/login.token \
--H "Cookie: x-rbac-token=$RBAC_TOKEN"
+-H "Cookie: x-rbac-token=$RBAC_TOKEN" \
+-H "Content-Type: application/json" \
+-X POST \
+-d '{
+    "appid": "restful",
+    "return_to": "/"
+}'
 ```
 
 * 响应
@@ -2478,7 +2483,7 @@ curl http://127.0.0.1:10080/wolf/rbac/login.token \
       "permissions": {},
       "roles": {}
     },
-        "token": "RBAC_TOKEN"
+    "token": "RBAC_TOKEN"
   }
 }
 ```
