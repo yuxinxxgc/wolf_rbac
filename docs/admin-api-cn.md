@@ -2375,7 +2375,10 @@ curl 'http://127.0.0.1:10080/wolf/rbac/login.submit' \
 字段 | 类型 | 必填项 |说明
 -------|-------|------|-----
 userInfo | [UserInfo](#UserInfo) | 是 | 用户信息
-
+permissions | [Permissions](#Permissions)| 否 | 菜单权限
+roles | [Roles](#Roles)| 否 | 用户角色
+dataper | [Roles](#Roles)| 否| 数据权限（待升级）
+token | string | 是 | 登录token
 
 #### 示例
 
@@ -2408,6 +2411,74 @@ curl http://127.0.0.1:10080/wolf/rbac/user_info \
       "permissions": {},
       "roles": {}
     }
+  }
+}
+```
+
+### login.token
+
+#### 请求方法: POST
+#### 请求URL: /wolf/rbac/login.token
+#### `Header` 参数: 需要 [`Agent`登录](#Rbac-Login)的token, 通过Cookie传递.
+#### `Request Body`参数
+
+字段 | 类型 | 必填项 |说明
+-------|-------|------|-----
+appid | string | 是 | 应用ID
+return_to | string | 否 | 设置登录成功后, 跳转的地址. 默认为 `/`
+
+#### `Response Body` 响应
+
+* data:
+
+字段 | 类型 | 必填项 |说明
+-------|-------|------|-----
+userInfo | [SimpleUserInfo](SimpleUserInfo) | 是 | 用户基本信息
+token | string | 是 | 登录token
+
+* reason
+  * `ERR_APPID_MISSING` 缺少appid
+  * `ERR_APPID_TOKEN` 无访问appid权限
+
+
+#### 响应
+
+由于wolf并不实际存储RBAC_TOKEN, 所以注销登录后, 只需要删除客户端token即可.
+操作完成后, 服务器将Cookie中的`x-rbac-token`设置为logouted. 并将302跳转到登录页面.
+
+
+#### 示例
+
+* 请求
+
+```json
+curl http://127.0.0.1:10080/wolf/rbac/login.token \
+-H "Cookie: x-rbac-token=$RBAC_TOKEN"
+```
+
+* 响应
+
+```json
+{
+  "ok": true,
+  "reason": "",
+  "data": {
+    "userInfo": {
+      "id": 696,
+      "username": "root",
+      "nickname": "root(super man)",
+      "email": null,
+      "appIDs": [
+        "openresty"
+      ],
+      "manager": "super",
+      "lastLogin": 1589100441,
+      "profile": null,
+      "createTime": 1578401859,
+      "permissions": {},
+      "roles": {}
+    },
+        "token": "RBAC_TOKEN"
   }
 }
 ```
