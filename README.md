@@ -13,6 +13,11 @@ The system can be applied to a variety of platforms and systems. Unified account
 ## Features
 
 
+
+
+
+
+
 * Language independent, any HTTP program can be used, including but not limited to: pure static web pages, JSP, PHP, ASP, PYTHON, NODE JS and other WEB systems
 * Low coupling, non-intrusive, supports new applications without any modifications or changes to the application, the system manages resource rights at the proxy level
 * Management backend (`console module`) for `application`, `user`, `role`, `permission` and `resources` management
